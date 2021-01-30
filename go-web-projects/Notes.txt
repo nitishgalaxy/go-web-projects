@@ -1,0 +1,520 @@
+On windows, use:
+    1. git for Windows 
+        - it will give you 'git bash' where you can run linux commands like 'ls', 'cat'
+
+
+cat ~/.bash_profile
+
+export GOPATH=/Users/nitisaha/Desktop/nitish_saha_work_area/learning/golang
+export GOBIN=$GOPATH/bin
+
+
+** Do not set GOPATH to GOROOT. Set any random folder.
+
+
+
+ go run main.go
+ go build -o hello.out main.go
+ ./hello.out
+
+
+You have to run go code from same folder as main.go otherwise golang might not find packages.
+
+
+- Functions can return more than 1 value.
+
+
+
+Fix VSCode static error on importing modules:
+
+> go mod init .
+Then delete  .mod file.
+
+
+-----------------------
+
+1.
+
+s := 8
+
+- No need to use var
+
+2. 
+
+var s = 8
+
+- automatic inferring of type 
+
+
+3.
+
+var s int 
+s = 8
+
+
+-----------------------
+
+When we declare a variable/function/type with first letter capital, it can be accessed by other packages.
+
+- Thats why we see on VSCode that function auto-suggestions showing for standard packages begin with capital letter.
+
+
+-----------------------
+
+Receivers:
+    1. Way of defining methods of a struct (OOP)
+    2. Youu are attaching a function to a struct type.
+
+
+type myStruct struct {
+	FirstName string
+}
+
+func (m *myStruct) printFirstName() string {
+	return m.FirstName
+}
+
+// var myVar myStruct
+// myVar.printFirstName()
+
+
+----------------------------------------------
+
+Maps:
+---------------
+
+myMap := make(map[string]string)
+
+myMap["hello"] = "Hola"
+log.Println(myMap["hello"])
+
+
+--------
+
+
+myMap := make(map[string]User)
+
+	me := User{
+		FirstName: "Trevor",
+		LastName:  "Sawler",
+	}
+
+	myMap["me"] = me
+
+	log.Println(myMap["me"].FirstName)
+
+
+
+- If you are not sure what you would be storing in a map (and you can store any type)
+
+myMap := make(map[string]interface{})
+
+- This is not recommended though.
+
+
+
+
+Slices:
+---------------
+
+	var mySlice []int
+
+	mySlice = append(mySlice, 2)
+	mySlice = append(mySlice, 1)
+	mySlice = append(mySlice, 3)
+
+
+    // Sort Integers
+    sort.Ints(mySlice)
+
+
+
+    // shorthand for slices
+
+	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	log.Println(numbers)
+
+	// print first two elements of slice, starting at first position
+	log.Println(numbers[0:2])
+
+    
+
+	// create a slice of strings
+	names := []string{"one", "seven", "fish", "cat"}
+	log.Println(names)
+
+
+
+Decision
+-----------
+
+if a == 10{
+
+}
+else{
+
+}
+
+
+Switch
+---------
+
+myVar := "cat"
+
+	switch myVar {
+	case "cat":
+		log.Println("myVar is set to cat")
+
+	case "dog":
+		log.Println("myVar is set to dog")
+
+	default:
+		log.Println("myVar is something else")
+	}
+
+
+
+Loops
+--------
+
+Go has only 1 type of loop = For loop 
+
+
+package main
+
+import "log"
+
+func main() {
+	for i := 0; i <= 10; i++ {
+		log.Println(i)
+	}
+
+	mySlice := []string{"dog", "cat", "mouse"}
+
+	for j, x := range mySlice {
+		log.Println(j, x)
+	}
+
+	for _, y := range mySlice {
+		log.Println(y)
+	}
+
+	myMap := make(map[string]string)
+	myMap["hello"] = "hola"
+	myMap["bye"] = "adios"
+
+	for key, value := range myMap {
+		log.Println(key, value)
+	}
+}
+
+
+
+Interfaces 
+-----------------
+
+- An interface is a contract.
+- We can create generic functions that accepts an interface rather than a specific  struct type.
+- Once you define an interface, anything else can implement that interface just by implementing the required methods.
+
+
+type Animal interface {
+	Says() string
+	NumberOfLegs() int
+}
+
+
+// Dog defines the dog type
+type Dog struct {
+	Name  string
+	Breed string
+}
+
+// Says has a receiver of type *Dog, so it satisfies part of the interface requirements for Animal
+// for the Dog type
+func (d *Dog) Says() string {
+	return "woof"
+}
+
+// NumberOfLegs satisfies the rest of the Animal interface requirements for the Dog type
+func (d *Dog) NumberOfLegs() int {
+	return 4
+}
+
+ - Any struct which implements Say() and NumberOfLegs() is also  of type Animal.
+ - Polymorphism... an object can be of many types 
+
+func Riddle(a Animal) {
+	info := fmt.Sprintf(`This animal says "%s" and has %d legs. What animal is this?`, a.Says(), a.NumberOfLegs())
+	fmt.Println(info)
+}
+
+
+Riddle(&dog)
+
+
+Note:
+
+
+Sceenario 1.
+
+func (d *Dog) Says() string {
+	return "woof"
+}
+
+func (d *Dog) NumberOfLegs() int {
+	return 4
+}
+
+Riddle(&dog)
+
+
+
+Sceenario 2.
+
+func (d Dog) Says() string {
+	return "woof"
+}
+
+func (d Dog) NumberOfLegs() int {
+	return 4
+}
+
+Riddle(dog)
+
+
+
+
+
+We cannot pass "dog" into "*Dog".
+
+
+
+
+Packages 
+--------------------
+
+- Go modules is the way we use packages.
+
+> go mod init github.com/nitishgalaxy/myniceprogram
+
+- This command creates a go.mod file 
+
+
+
+Channels 
+----------
+
+Used to send data from one part of your program to another part of your program very easily.
+
+
+
+package main
+
+import (
+	"github.com/tsawler/myniceprogram/helpers"
+	"log"
+)
+
+const numPool = 1000
+
+func calculateValue(intChan chan int) {
+	randomNumber := helpers.RandomNumber(numPool)
+	intChan <- randomNumber
+}
+
+
+func main() {
+	intChan := make(chan int)
+
+	// Close channel as soon as function ends
+	defer close(intChan)
+
+	// Run a goroutine
+	go calculateValue(intChan)
+
+	// Listen for the response to the channel
+	num := <-intChan
+	log.Println(num)
+}
+
+
+
+--------------------------------------
+
+Read and Write JSON 
+
+
+
+package main
+
+import (
+	"encoding/json"
+	"log"
+)
+
+// Define schema
+// Translate "first_name" in json to FirstName in Go and vice-versa.
+type Person struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	HairColor string `json:"hair_color"`
+	HasDog    bool   `json:"has_dog"`
+}
+
+func main() {
+	myJSON := `
+	[
+		{
+			"first_name": "Clark",
+			"last_name": "Kent",
+			"hair_color": "black",
+			"has_dog": true 
+		},
+		{
+			"first_name": "Bruce",
+			"last_name": "Wayne",
+			"hair_color": "black",
+			"has_dog": false 
+		}
+	]
+	`
+
+	// JSON to STRUCT
+	var unmarshalled []Person
+
+	err := json.Unmarshal([]byte(myJSON), &unmarshalled)
+
+	if err != nil {
+		log.Println("Error unmarshalling json", err)
+	}
+
+	log.Printf("unmarshalled : %v", unmarshalled)
+
+	// STRUCT to JSON
+	var mySlice []Person
+
+	var m1 Person
+	m1.FirstName = "Wally"
+	m1.LastName = "West"
+	m1.HairColor = "red"
+	m1.HasDog = false
+
+	mySlice = append(mySlice, m1)
+
+	var m2 Person
+	m2.FirstName = "Prince"
+	m2.LastName = "Diana"
+	m2.HasDog = false
+
+	mySlice = append(mySlice, m2)
+
+	newJson, err := json.MarshalIndent(mySlice, "", "    ")
+
+	if err != nil {
+		log.Println("Error marshalling into json", err)
+	}
+
+	log.Printf("marshalled : %v", string(newJson))
+
+}
+
+
+
+Testing 
+-----------
+
+Test files has to end with _test.go 
+
+E.g.  main_test.go  
+
+
+
+$ go test
+PASS
+ok      tests   0.023s
+
+
+$ go test -v
+=== RUN   TestDivide
+--- PASS: TestDivide (0.00s)
+=== RUN   TestBadDivide
+--- PASS: TestBadDivide (0.00s)
+=== RUN   TestDivision
+--- PASS: TestDivision (0.00s)
+PASS
+ok      tests   0.023s
+NITISAHA-M-H074:testing nitisaha$ 
+
+
+
+package main
+
+import "testing"
+
+/*
+Things you can do:
+1) Check your coverage with this command:
+    go test -cover
+
+2) Get your coverage in the browser with this command:
+    go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+*/
+
+// manual tests
+func TestDivide(t *testing.T) {
+	_, err := divide(10.0, 1.0)
+	if err != nil {
+		t.Error("Got an error when should not have")
+	}
+}
+
+func TestBadDivide(t *testing.T) {
+	_, err := divide(10.0, 0)
+	if err == nil {
+		t.Error("Did not get an error when should have")
+	}
+}
+
+// table test
+var tests = []struct {
+	name     string // Name of test
+	dividend float32
+	divisor  float32
+	expected float32
+	isErr    bool // is error expected
+}{
+	{"valid-data", 100.0, 10.0, 10.0, false},
+	{"invalid-data", 100.0, 0.0, 0.0, true},
+	{"expect-5", 50.0, 10.0, 5.0, false},
+	{"expect-fraction", -1.0, -777.0, 0.0012870013, false},
+}
+
+func TestDivision(t *testing.T) {
+	for _, tt := range tests {
+		got, err := divide(tt.dividend, tt.divisor)
+		if tt.isErr {
+			if err == nil {
+				t.Error("Expected an error but did not get one")
+			}
+		} else {
+			if err != nil {
+				t.Error("Did not expect an error, but got one", err.Error())
+			}
+		}
+
+		if got != tt.expected {
+			t.Errorf("Expected %f but got %f", tt.expected, got)
+		}
+	}
+}
+
+
+
+
+
+------------------------------------------------------------------------------------------
+
+
+fmt.Sprintf -> Return a formatted string 
+
