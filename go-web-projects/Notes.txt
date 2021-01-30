@@ -21,6 +21,11 @@ export GOBIN=$GOPATH/bin
 You have to run go code from same folder as main.go otherwise golang might not find packages.
 
 
+go run *.go
+- Use this command when you have refactored code into multiple files.
+
+
+
 - Functions can return more than 1 value.
 
 
@@ -517,4 +522,26 @@ func TestDivision(t *testing.T) {
 
 
 fmt.Sprintf -> Return a formatted string 
+
+
+------------------------------------------------------------------------------------------
+
+
+Using go modules 
+
+
+go modules = package manager for go. Like npm.
+
+> cd project_folder 
+
+> go mod init github.com/nitishgalaxy/go-course
+
+> go run cmd/web/*.go
+
+New way of go programming is using Go Modules.
+
+
+
+
+
 
