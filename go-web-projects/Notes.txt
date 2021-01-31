@@ -567,7 +567,31 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 import cycle not allowed  -> Packages that are importing eaach other is not allowed in Go.
 
 
+----------------------------------------------------
 
 
+PAT Router:
+
+https://github.com/bmizerany/pat
+
+
+go get github.com/bmizerany/pat
+
+// It adds import entry on go.mod 
+
+
+----------------------------------------------------
+
+
+CHI Router:
+
+https://github.com/go-chi/chi
+
+go get -u github.com/go-chi/chi
+
+
+
+Get rid of un-used packages
+> go mod tidy
 
 
