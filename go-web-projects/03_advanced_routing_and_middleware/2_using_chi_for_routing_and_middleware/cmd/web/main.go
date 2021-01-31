@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/nitishgalaxy/go-course/pkg/config"
 	"github.com/nitishgalaxy/go-course/pkg/handlers"
 	"github.com/nitishgalaxy/go-course/pkg/render"
@@ -11,8 +13,21 @@ import (
 
 const portNumber = ":8080"
 
+var app config.AppConfig // Declare here so it is available in middleware also (same package)
+var session *scs.SessionManager
+
 func main() {
-	var app config.AppConfig
+
+	// Change this to True when in Production
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true // Persist cookie even after browser closing
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction //  false // True in Prod
+
+	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 
