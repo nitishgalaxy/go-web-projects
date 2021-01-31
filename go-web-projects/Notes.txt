@@ -541,6 +541,32 @@ go modules = package manager for go. Like npm.
 New way of go programming is using Go Modules.
 
 
+Working with Layouts 
+-----------------------
+
+base.layout.tmpl 
+-----------------
+
+
+
+----------------------------------------------------
+
+Repository Pattern - Check in 8_using_application_wide_config
+
+
+// About is the about page handler
+func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "about.page.tmpl")
+}
+
+
+(m *Repository) -> We added a receiver to this  function... converting it to a method.
+
+
+
+import cycle not allowed  -> Packages that are importing eaach other is not allowed in Go.
+
+
 
 
 
