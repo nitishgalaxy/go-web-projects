@@ -595,3 +595,18 @@ Get rid of un-used packages
 > go mod tidy
 
 
+
+CSRF:
+
+golang nosurf 
+
+https://github.com/justinas/nosurf
+
+
+go get github.com/justinas/nosurf
+
+
+
+
+
+
